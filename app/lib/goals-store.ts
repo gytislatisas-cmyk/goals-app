@@ -79,3 +79,8 @@ export function addGoal(input: GoalInput): boolean {
   };
   return save([goal, ...getSnapshot()!]);
 }
+
+// Subgoals live inside their goal, so removing the goal removes them too.
+export function deleteGoal(id: string): boolean {
+  return save(getSnapshot()!.filter((goal) => goal.id !== id));
+}
