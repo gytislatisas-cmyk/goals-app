@@ -1,3 +1,26 @@
+## About
+Goals is a small app for tracking personal goals. Each goal has a start and
+end date and a checklist of subgoals; its progress is the share of subgoals
+completed.
+
+## Stack
+- Next.js (App Router), TypeScript, Tailwind CSS.
+
+## How to run
+- npm run dev, then open http://localhost:3000.
+
+## Constraints
+- Runs locally only. No deployment and no public URL.
+- No backend, no API routes, no database, no user accounts.
+- Data is saved in the browser (mechanism to be decided; update this line
+  once chosen).
+
+## Rules
+- Use the App Router, not the Pages Router.
+- Use TypeScript and Tailwind for all code and styling.
+- Do not add new libraries without asking first.
+- Explain what you changed after each task.
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 ## This is NOT the Next.js you know
