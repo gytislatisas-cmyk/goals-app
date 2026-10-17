@@ -1,0 +1,119 @@
+"use client";
+
+import { useState } from "react";
+import { validateGoal, type GoalErrors } from "../lib/goals";
+import { addGoal } from "../lib/goals-store";
+
+const inputClass =
+  "w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50";
+
+export function GoalForm() {
+  const [title, setTitle] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [errors, setErrors] = useState<GoalErrors>({});
+  const [saveFailed, setSaveFailed] = useState(false);
+
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const input = { title, startDate, endDate };
+    const found = validateGoal(input);
+    setErrors(found);
+    setSaveFailed(false);
+    if (Object.keys(found).length > 0) return;
+
+    if (addGoal(input)) {
+      setTitle("");
+      setStartDate("");
+      setEndDate("");
+    } else {
+      setSaveFailed(true);
+    }
+  }
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      noValidate
+      className="flex flex-col gap-4 rounded-lg border border-zinc-200 p-4 dark:border-zinc-800"
+    >
+      <div className="flex flex-col gap-1">
+        <label htmlFor="goal-title" className="text-sm font-medium">
+          Title
+        </label>
+        <input
+          id="goal-title"
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          aria-invalid={errors.title ? true : undefined}
+          aria-describedby={errors.title ? "goal-title-error" : undefined}
+          className={inputClass}
+        />
+        {errors.title && (
+          <p id="goal-title-error" role="alert" className="text-sm text-red-600">
+            {errors.title}
+          </p>
+        )}
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="flex flex-col gap-1">
+          <label htmlFor="goal-start" className="text-sm font-medium">
+            Start date
+          </label>
+          <input
+            id="goal-start"
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            aria-invalid={errors.startDate ? true : undefined}
+            aria-describedby={errors.startDate ? "goal-start-error" : undefined}
+            className={inputClass}
+          />
+          {errors.startDate && (
+            <p
+              id="goal-start-error"
+              role="alert"
+              className="text-sm text-red-600"
+            >
+              {errors.startDate}
+            </p>
+          )}
+        </div>
+        <div className="flex flex-col gap-1">
+          <label htmlFor="goal-end" className="text-sm font-medium">
+            End date
+          </label>
+          <input
+            id="goal-end"
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            aria-invalid={errors.endDate ? true : undefined}
+            aria-describedby={errors.endDate ? "goal-end-error" : undefined}
+            className={inputClass}
+          />
+          {errors.endDate && (
+            <p id="goal-end-error" role="alert" className="text-sm text-red-600">
+              {errors.endDate}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {saveFailed && (
+        <p role="alert" className="text-sm text-red-600">
+          Couldn&apos;t save. Browser storage may be full or unavailable.
+        </p>
+      )}
+
+      <button
+        type="submit"
+        className="self-start rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
+      >
+        Add goal
+      </button>
+    </form>
+  );
+}
