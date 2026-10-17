@@ -84,3 +84,19 @@ export function addGoal(input: GoalInput): boolean {
 export function deleteGoal(id: string): boolean {
   return save(getSnapshot()!.filter((goal) => goal.id !== id));
 }
+
+// Only the title and dates change; subgoals and progress are kept as they are.
+export function updateGoal(id: string, input: GoalInput): boolean {
+  return save(
+    getSnapshot()!.map((goal) =>
+      goal.id === id
+        ? {
+            ...goal,
+            title: input.title.trim(),
+            startDate: input.startDate,
+            endDate: input.endDate,
+          }
+        : goal,
+    ),
+  );
+}
