@@ -12,8 +12,8 @@ completed.
 ## Constraints
 - Runs locally only. No deployment and no public URL.
 - No backend, no API routes, no database, no user accounts.
-- Data is saved in the browser (mechanism to be decided; update this line
-  once chosen).
+- Data is saved in the browser's localStorage as one versioned JSON value.
+  See docs/decisions.md and docs/storage-research.md.
 
 ## Rules
 - Use the App Router, not the Pages Router.
