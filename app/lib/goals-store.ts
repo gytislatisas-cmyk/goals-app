@@ -1,4 +1,4 @@
-import type { Goal, GoalInput } from "./goals";
+import type { Goal, GoalInput, Subgoal } from "./goals";
 
 const STORAGE_KEY = "goals-app";
 const VERSION = 1;
@@ -99,4 +99,62 @@ export function updateGoal(id: string, input: GoalInput): boolean {
         : goal,
     ),
   );
+}
+
+function updateGoalById(id: string, change: (goal: Goal) => Goal): boolean {
+  return save(
+    getSnapshot()!.map((goal) => (goal.id === id ? change(goal) : goal)),
+  );
+}
+
+export function addSubgoal(goalId: string, input: GoalInput): boolean {
+  const subgoal: Subgoal = {
+    id: crypto.randomUUID(),
+    title: input.title.trim(),
+    startDate: input.startDate,
+    endDate: input.endDate,
+    completed: false,
+  };
+  return updateGoalById(goalId, (goal) => ({
+    ...goal,
+    subgoals: [...goal.subgoals, subgoal],
+  }));
+}
+
+function changeSubgoal(
+  goalId: string,
+  subgoalId: string,
+  change: (subgoal: Subgoal) => Subgoal,
+): boolean {
+  return updateGoalById(goalId, (goal) => ({
+    ...goal,
+    subgoals: goal.subgoals.map((s) => (s.id === subgoalId ? change(s) : s)),
+  }));
+}
+
+export function updateSubgoal(
+  goalId: string,
+  subgoalId: string,
+  input: GoalInput,
+): boolean {
+  return changeSubgoal(goalId, subgoalId, (s) => ({
+    ...s,
+    title: input.title.trim(),
+    startDate: input.startDate,
+    endDate: input.endDate,
+  }));
+}
+
+export function toggleSubgoal(goalId: string, subgoalId: string): boolean {
+  return changeSubgoal(goalId, subgoalId, (s) => ({
+    ...s,
+    completed: !s.completed,
+  }));
+}
+
+export function deleteSubgoal(goalId: string, subgoalId: string): boolean {
+  return updateGoalById(goalId, (goal) => ({
+    ...goal,
+    subgoals: goal.subgoals.filter((s) => s.id !== subgoalId),
+  }));
 }

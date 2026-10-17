@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { validateGoal, type GoalErrors } from "../lib/goals";
-import { addGoal } from "../lib/goals-store";
+import { addGoal, addSubgoal } from "../lib/goals-store";
 
 const inputClass =
   "w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50";
 
-export function GoalForm() {
+// Adds a goal, or a subgoal of that goal when goalId is given.
+export function GoalForm({ goalId }: { goalId?: string }) {
+  const label = goalId ? "Add subgoal" : "Add goal";
   const [title, setTitle] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -22,7 +24,7 @@ export function GoalForm() {
     setSaveFailed(false);
     if (Object.keys(found).length > 0) return;
 
-    if (addGoal(input)) {
+    if (goalId ? addSubgoal(goalId, input) : addGoal(input)) {
       setTitle("");
       setStartDate("");
       setEndDate("");
@@ -112,7 +114,7 @@ export function GoalForm() {
         type="submit"
         className="self-start rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
       >
-        Add goal
+        {label}
       </button>
     </form>
   );
