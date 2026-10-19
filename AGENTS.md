@@ -5,6 +5,9 @@ completed.
 
 ## What it does
 - Add a goal with a title, start date and end date. Edit or delete it.
+- Complete a goal from its card with the check button: it marks every subgoal
+  done. The button is disabled for a goal with no subgoals or one that is
+  already completed. There is no undo; untick subgoals on the goal page.
 - Open a goal to manage its subgoals: add, edit, delete, and tick them off.
   Each subgoal has its own title and dates.
 - Progress is the share of subgoals completed, shown as a bar and
@@ -23,24 +26,31 @@ completed.
 - Deleting a goal also deletes its subgoals.
 
 ## Pages
-- `/` (app/page.tsx): the goals list with its filter bar, search box and the add-goal
-  form. Each card links to its goal page and has edit and delete buttons.
+- `/` (app/page.tsx): the add-goal form and the goals list with its filter bar
+  and search box. Each card links to its goal page and has complete, edit and
+  delete buttons.
 - `/goals/[id]` (app/goals/[id]/page.tsx): one goal with its progress, the
-  add-subgoal form and the subgoal list with its filter bar and search box. Shows a loading state until storage
-  has been read, then "Goal not found" if the id doesn't exist.
+  add-subgoal form and the subgoal list with its filter bar and search box.
+  Shows a loading state until storage has been read, then "Goal not found" if
+  the id doesn't exist.
 
 ## Code layout
 - app/lib/goals.ts: types (Goal, Subgoal), validation, progress, completion,
   time progress, status (getStatus, StatusFilter), search match
   (matchesQuery), date format.
 - app/lib/goals-store.ts: all reading and writing of localStorage, for goals
-  and subgoals. Components go through it and never touch localStorage.
-- app/components/: UI. EditForm, ProgressBar, TimeBar and the icons are shared
-  by goals and subgoals; FilterBar is the status filter and SearchBar the title search, both used on
-  both pages;
-  useToday gives today's date to TimeBar and the filters; TodayDate is
-  rendered once in app/layout.tsx;
-  GoalForm adds a goal, or a subgoal when given a goalId.
+  and subgoals (add, update, delete, completeGoal, toggleSubgoal). Components
+  go through it and never touch localStorage.
+- app/components/: UI.
+  - GoalsList and GoalCard make up the goals list; GoalDetail and
+    SubgoalItem make up the goal page.
+  - EditForm, ProgressBar, TimeBar and the icons are shared by goals and
+    subgoals.
+  - FilterBar is the status filter and SearchBar the title search, both used
+    on both pages.
+  - useToday gives today's date to TimeBar and the filters; TodayDate is
+    rendered once in app/layout.tsx.
+  - GoalForm adds a goal, or a subgoal when given a goalId.
 
 ## Stack
 - Next.js (App Router), TypeScript, Tailwind CSS.

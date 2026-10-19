@@ -97,6 +97,7 @@ in-memory data is left unchanged.
 | `addGoal(input)`                        | Creates a goal with no subgoals, placed first in list  |
 | `updateGoal(id, input)`                 | Changes title and dates only; subgoals are kept        |
 | `deleteGoal(id)`                        | Removes the goal and its subgoals                      |
+| `completeGoal(id)`                      | Sets `completed` on every subgoal of the goal          |
 
 ### Subgoals
 
