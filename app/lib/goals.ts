@@ -117,7 +117,7 @@ export function matchesQuery(title: string, query: string): boolean {
 }
 
 // Sorts by end date, earliest first, with overdue items ahead of everything
-// else. Returns a new array; ties keep their original (creation) order.
+// else. Returns a new array; ties keep their stored order.
 export function sortByEndDate<T extends { startDate: string; endDate: string }>(
   items: T[],
   isCompleted: (item: T) => boolean,
