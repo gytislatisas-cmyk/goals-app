@@ -17,22 +17,27 @@ completed.
 - A filter bar (All, In progress, Overdue, Not started, Completed) narrows the
   goals list and, on the goal page, the subgoal list. The status is the same
   one the time bar shows. The choice is not saved and resets on reload.
+- A search box next to each filter bar narrows the same lists by title: a
+  title matches when it, or any word in it, starts with the typed text
+  (case ignored). It combines with the status filter and also resets on reload.
 - Deleting a goal also deletes its subgoals.
 
 ## Pages
-- `/` (app/page.tsx): the goals list with its filter bar and the add-goal
+- `/` (app/page.tsx): the goals list with its filter bar, search box and the add-goal
   form. Each card links to its goal page and has edit and delete buttons.
 - `/goals/[id]` (app/goals/[id]/page.tsx): one goal with its progress, the
-  add-subgoal form and the subgoal list with its filter bar. Shows a loading state until storage
+  add-subgoal form and the subgoal list with its filter bar and search box. Shows a loading state until storage
   has been read, then "Goal not found" if the id doesn't exist.
 
 ## Code layout
 - app/lib/goals.ts: types (Goal, Subgoal), validation, progress, completion,
-  time progress, status (getStatus, StatusFilter), date format.
+  time progress, status (getStatus, StatusFilter), search match
+  (matchesQuery), date format.
 - app/lib/goals-store.ts: all reading and writing of localStorage, for goals
   and subgoals. Components go through it and never touch localStorage.
 - app/components/: UI. EditForm, ProgressBar, TimeBar and the icons are shared
-  by goals and subgoals; FilterBar is the status filter used on both pages;
+  by goals and subgoals; FilterBar is the status filter and SearchBar the title search, both used on
+  both pages;
   useToday gives today's date to TimeBar and the filters; TodayDate is
   rendered once in app/layout.tsx;
   GoalForm adds a goal, or a subgoal when given a goalId.
