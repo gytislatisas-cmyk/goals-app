@@ -3,14 +3,16 @@
 import Link from "next/link";
 import { useState } from "react";
 import { formatDate, isGoalCompleted, type Goal } from "../lib/goals";
-import { deleteGoal, updateGoal } from "../lib/goals-store";
+import { completeGoal, deleteGoal, updateGoal } from "../lib/goals-store";
 import { EditForm } from "./edit-form";
-import { PencilIcon, TrashIcon } from "./icons";
+import { CheckIcon, PencilIcon, TrashIcon } from "./icons";
 import { ProgressBar } from "./progress-bar";
 import { TimeBar } from "./time-bar";
 
 export function GoalCard({ goal }: { goal: Goal }) {
   const [editing, setEditing] = useState(false);
+  // A goal with no subgoals can't be completed, so there is nothing to do.
+  const canComplete = goal.subgoals.length > 0 && !isGoalCompleted(goal);
 
   if (editing) {
     return (
@@ -28,7 +30,7 @@ export function GoalCard({ goal }: { goal: Goal }) {
     <div className="relative">
       <Link
         href={`/goals/${goal.id}`}
-        className="flex flex-col gap-3 rounded-lg border border-zinc-200 p-4 pr-24 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-900"
+        className="flex flex-col gap-3 rounded-lg border border-zinc-200 p-4 pr-32 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-900"
       >
         <div>
           <h2 className="text-lg font-semibold">{goal.title}</h2>
@@ -44,6 +46,16 @@ export function GoalCard({ goal }: { goal: Goal }) {
           completed={isGoalCompleted(goal)}
         />
       </Link>
+      <button
+        type="button"
+        onClick={() => completeGoal(goal.id)}
+        disabled={!canComplete}
+        aria-label={`Complete goal ${goal.title}`}
+        title={canComplete ? "Complete goal and all its subgoals" : "Nothing to complete"}
+        className="absolute right-[4.75rem] top-3 rounded-md p-1.5 text-zinc-500 transition-colors hover:bg-green-50 hover:text-green-600 disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-zinc-500 dark:hover:bg-green-950"
+      >
+        <CheckIcon />
+      </button>
       <button
         type="button"
         onClick={() => setEditing(true)}

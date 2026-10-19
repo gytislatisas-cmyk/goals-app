@@ -107,6 +107,14 @@ function updateGoalById(id: string, change: (goal: Goal) => Goal): boolean {
   );
 }
 
+// Marks every subgoal of the goal as done, which completes the goal.
+export function completeGoal(id: string): boolean {
+  return updateGoalById(id, (goal) => ({
+    ...goal,
+    subgoals: goal.subgoals.map((s) => ({ ...s, completed: true })),
+  }));
+}
+
 export function addSubgoal(goalId: string, input: GoalInput): boolean {
   const subgoal: Subgoal = {
     id: crypto.randomUUID(),
