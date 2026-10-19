@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { formatDate, type Goal } from "../lib/goals";
+import { formatDate, isGoalCompleted, type Goal } from "../lib/goals";
 import { deleteGoal, updateGoal } from "../lib/goals-store";
 import { EditForm } from "./edit-form";
 import { PencilIcon, TrashIcon } from "./icons";
 import { ProgressBar } from "./progress-bar";
+import { TimeBar } from "./time-bar";
 
 export function GoalCard({ goal }: { goal: Goal }) {
   const [editing, setEditing] = useState(false);
@@ -36,6 +37,12 @@ export function GoalCard({ goal }: { goal: Goal }) {
           </p>
         </div>
         <ProgressBar goal={goal} />
+        <TimeBar
+          title={goal.title}
+          startDate={goal.startDate}
+          endDate={goal.endDate}
+          completed={isGoalCompleted(goal)}
+        />
       </Link>
       <button
         type="button"

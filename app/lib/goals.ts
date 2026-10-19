@@ -43,8 +43,47 @@ export function getProgress(goal: Goal) {
   return { done, total, percent };
 }
 
+// A goal is completed once it has subgoals and all of them are done.
+export function isGoalCompleted(goal: Goal): boolean {
+  const { done, total } = getProgress(goal);
+  return total > 0 && done === total;
+}
+
 // Format a YYYY-MM-DD string in the viewer's locale without time zone shifts.
 export function formatDate(iso: string): string {
   const [year, month, day] = iso.split("-").map(Number);
   return new Date(year, month - 1, day).toLocaleDateString();
+}
+
+// Whole days from one YYYY-MM-DD date to another. Uses UTC so DST can't skew it.
+function daysBetween(fromIso: string, toIso: string): number {
+  const [fy, fm, fd] = fromIso.split("-").map(Number);
+  const [ty, tm, td] = toIso.split("-").map(Number);
+  return Math.round((Date.UTC(ty, tm - 1, td) - Date.UTC(fy, fm - 1, fd)) / 86_400_000);
+}
+
+// Today in the viewer's time zone as YYYY-MM-DD.
+export function getTodayIso(): string {
+  const now = new Date();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${now.getFullYear()}-${month}-${day}`;
+}
+
+// How much of the start–end span has passed. The end date counts as a full day,
+// so a goal is overdue only from the day after its end date.
+export function getTimeProgress(
+  item: { startDate: string; endDate: string },
+  todayIso: string,
+) {
+  const total = daysBetween(item.startDate, item.endDate) + 1;
+  const passed = Math.min(Math.max(daysBetween(item.startDate, todayIso), 0), total);
+  const daysLeft = daysBetween(todayIso, item.endDate);
+  const percent = Math.round((passed / total) * 100);
+  return {
+    percent,
+    daysLeft,
+    overdue: daysLeft < 0,
+    notStarted: daysBetween(todayIso, item.startDate) > 0,
+  };
 }
