@@ -35,3 +35,11 @@ export function TrashIcon() {
     </Icon>
   );
 }
+
+export function CheckIcon() {
+  return (
+    <Icon>
+      <path d="M20 6L9 17l-5-5" />
+    </Icon>
+  );
+}
