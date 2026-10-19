@@ -9,6 +9,11 @@ completed.
   Each subgoal has its own title and dates.
 - Progress is the share of subgoals completed, shown as a bar and
   "X of Y subgoals done" on the goal card and the goal page.
+- Time passed is shown as a second bar with a label ("N days left", "Due
+  today", "Not started" or red "Overdue") on goal cards, the goal page and each
+  subgoal. A completed goal or subgoal shows "Completed!" instead. A goal is
+  completed when it has subgoals and all are done.
+- Today's date is shown in the top right corner of every page.
 - Deleting a goal also deletes its subgoals.
 
 ## Pages
@@ -19,11 +24,13 @@ completed.
   has been read, then "Goal not found" if the id doesn't exist.
 
 ## Code layout
-- app/lib/goals.ts: types (Goal, Subgoal), validation, progress, date format.
+- app/lib/goals.ts: types (Goal, Subgoal), validation, progress, completion,
+  time progress, date format.
 - app/lib/goals-store.ts: all reading and writing of localStorage, for goals
   and subgoals. Components go through it and never touch localStorage.
-- app/components/: UI. EditForm, ProgressBar and the icons are shared by goals
-  and subgoals; GoalForm adds a goal, or a subgoal when given a goalId.
+- app/components/: UI. EditForm, ProgressBar, TimeBar and the icons are shared
+  by goals and subgoals; TodayDate is rendered once in app/layout.tsx;
+  GoalForm adds a goal, or a subgoal when given a goalId.
 
 ## Stack
 - Next.js (App Router), TypeScript, Tailwind CSS.
@@ -36,7 +43,7 @@ completed.
 - Runs locally only. No deployment and no public URL.
 - No backend, no API routes, no database, no user accounts.
 - Data is saved in the browser's localStorage as one versioned JSON value.
-  See docs/decisions.md and docs/storage-research.md.
+  See docs/decisions.md, docs/storage-research.md and docs/api-schema.md.
   - Key `goals-app`, value `{ version: 1, goals: Goal[] }`. Subgoals are
     stored inside their goal.
   - Saving happens only on user actions, never on load. Changes in another
