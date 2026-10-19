@@ -24,6 +24,8 @@ completed.
 - A search box next to each filter bar narrows the same lists by title: a
   title matches when it, or any word in it, starts with the typed text
   (case ignored). It combines with the status filter and also resets on reload.
+- Goals and subgoals are listed by end date, earliest first, with overdue ones
+  ahead of the rest. This order is fixed; it is not a setting.
 - Deleting a goal also deletes its subgoals.
 
 ## Pages
@@ -37,8 +39,8 @@ completed.
 
 ## Code layout
 - app/lib/goals.ts: types (Goal, Subgoal), validation, progress, completion,
-  time progress, status (getStatus, StatusFilter), search match
-  (matchesQuery), date format.
+  time progress, status (getStatus, StatusFilter), sort order
+  (sortByEndDate), search match (matchesQuery), date format.
 - app/lib/goals-store.ts: all reading and writing of localStorage, for goals
   and subgoals (add, update, delete, completeGoal, toggleSubgoal). Components
   go through it and never touch localStorage.

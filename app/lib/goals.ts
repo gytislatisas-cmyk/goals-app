@@ -115,3 +115,19 @@ export function matchesQuery(title: string, query: string): boolean {
     .split(/\s+/)
     .some((word) => word.startsWith(q)) || title.toLowerCase().startsWith(q);
 }
+
+// Sorts by end date, earliest first, with overdue items ahead of everything
+// else. Returns a new array; ties keep their original (creation) order.
+export function sortByEndDate<T extends { startDate: string; endDate: string }>(
+  items: T[],
+  isCompleted: (item: T) => boolean,
+  todayIso: string,
+): T[] {
+  const isOverdue = (item: T) =>
+    todayIso !== "" && getStatus(item, isCompleted(item), todayIso) === "overdue";
+  return [...items].sort((a, b) => {
+    const overdue = Number(isOverdue(b)) - Number(isOverdue(a));
+    if (overdue !== 0) return overdue;
+    return a.endDate < b.endDate ? -1 : a.endDate > b.endDate ? 1 : 0;
+  });
+}
