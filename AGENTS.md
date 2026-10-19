@@ -3,17 +3,46 @@ Goals is a small app for tracking personal goals. Each goal has a start and
 end date and a checklist of subgoals; its progress is the share of subgoals
 completed.
 
+## What it does
+- Add a goal with a title, start date and end date. Edit or delete it.
+- Open a goal to manage its subgoals: add, edit, delete, and tick them off.
+  Each subgoal has its own title and dates.
+- Progress is the share of subgoals completed, shown as a bar and
+  "X of Y subgoals done" on the goal card and the goal page.
+- Deleting a goal also deletes its subgoals.
+
+## Pages
+- `/` (app/page.tsx): the goals list and the add-goal form. Each card links
+  to its goal page and has edit and delete buttons.
+- `/goals/[id]` (app/goals/[id]/page.tsx): one goal with its progress, the
+  add-subgoal form and the subgoal list. Shows a loading state until storage
+  has been read, then "Goal not found" if the id doesn't exist.
+
+## Code layout
+- app/lib/goals.ts: types (Goal, Subgoal), validation, progress, date format.
+- app/lib/goals-store.ts: all reading and writing of localStorage, for goals
+  and subgoals. Components go through it and never touch localStorage.
+- app/components/: UI. EditForm, ProgressBar and the icons are shared by goals
+  and subgoals; GoalForm adds a goal, or a subgoal when given a goalId.
+
 ## Stack
 - Next.js (App Router), TypeScript, Tailwind CSS.
 
 ## How to run
 - npm run dev, then open http://localhost:3000.
+- npm run lint checks the code. npm run build makes a production build.
 
 ## Constraints
 - Runs locally only. No deployment and no public URL.
 - No backend, no API routes, no database, no user accounts.
 - Data is saved in the browser's localStorage as one versioned JSON value.
   See docs/decisions.md and docs/storage-research.md.
+  - Key `goals-app`, value `{ version: 1, goals: Goal[] }`. Subgoals are
+    stored inside their goal.
+  - Saving happens only on user actions, never on load. Changes in another
+    tab are picked up through the `storage` event.
+  - Storage is empty on the server, so pages wait for the client to read it
+    before showing goals.
 
 ## Rules
 - Use the App Router, not the Pages Router.
