@@ -28,6 +28,16 @@ completed.
   ahead of the rest. This order is fixed; it is not a setting.
 - Deleting a goal also deletes its subgoals.
 
+## Look
+- Clean, minimal style with a navy accent (Tailwind `blue-900`, `blue-500` in
+  dark mode) on primary buttons, the active filter and the home page heading,
+  which starts with a 🚀.
+- Cards (goal cards, subgoal rows, forms) are white (`zinc-900` in dark mode)
+  with `rounded-xl` corners and a soft shadow; inputs and buttons use
+  `rounded-lg`.
+- Page background and text colours are the `--background` / `--foreground`
+  variables in app/globals.css (light slate in light mode, deep navy in dark).
+
 ## Pages
 - `/` (app/page.tsx): the add-goal form and the goals list with its filter bar
   and search box. Each card links to its goal page and has complete, edit and
