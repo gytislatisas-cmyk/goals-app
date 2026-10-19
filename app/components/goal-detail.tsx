@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSyncExternalStore } from "react";
-import { formatDate } from "../lib/goals";
+import { formatDate, isGoalCompleted } from "../lib/goals";
 import {
   getServerSnapshot,
   getSnapshot,
@@ -11,6 +11,7 @@ import {
 import { GoalForm } from "./goal-form";
 import { ProgressBar } from "./progress-bar";
 import { SubgoalItem } from "./subgoal-item";
+import { TimeBar } from "./time-bar";
 
 const linkClass =
   "self-start text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50";
@@ -57,6 +58,12 @@ export function GoalDetail({ id }: { id: string }) {
           </p>
         </div>
         <ProgressBar goal={goal} />
+        <TimeBar
+          title={goal.title}
+          startDate={goal.startDate}
+          endDate={goal.endDate}
+          completed={isGoalCompleted(goal)}
+        />
       </div>
       <GoalForm goalId={goal.id} />
       {goal.subgoals.length === 0 ? (

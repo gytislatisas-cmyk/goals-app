@@ -9,6 +9,7 @@ import {
 } from "../lib/goals-store";
 import { EditForm } from "./edit-form";
 import { PencilIcon, TrashIcon } from "./icons";
+import { TimeBar } from "./time-bar";
 
 export function SubgoalItem({
   goalId,
@@ -48,6 +49,14 @@ export function SubgoalItem({
         <p className="text-sm text-zinc-600 dark:text-zinc-400">
           {formatDate(subgoal.startDate)} – {formatDate(subgoal.endDate)}
         </p>
+        <div className="mt-2">
+          <TimeBar
+            title={subgoal.title}
+            startDate={subgoal.startDate}
+            endDate={subgoal.endDate}
+            completed={subgoal.completed}
+          />
+        </div>
       </div>
       <button
         type="button"
