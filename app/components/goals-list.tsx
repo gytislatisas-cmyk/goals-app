@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
-import { getStatus, isGoalCompleted, matchesQuery, type StatusFilter } from "../lib/goals";
+import {
+  getStatus,
+  isGoalCompleted,
+  matchesQuery,
+  sortByEndDate,
+  type StatusFilter,
+} from "../lib/goals";
 import {
   getServerSnapshot,
   getSnapshot,
@@ -36,12 +42,16 @@ export function GoalsList() {
     );
   }
 
-  const visible = goals.filter(
-    (goal) =>
-      matchesQuery(goal.title, query) &&
-      (filter === "all" ||
-        today === "" ||
-        getStatus(goal, isGoalCompleted(goal), today) === filter),
+  const visible = sortByEndDate(
+    goals.filter(
+      (goal) =>
+        matchesQuery(goal.title, query) &&
+        (filter === "all" ||
+          today === "" ||
+          getStatus(goal, isGoalCompleted(goal), today) === filter),
+    ),
+    isGoalCompleted,
+    today,
   );
 
   return (

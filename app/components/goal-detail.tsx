@@ -7,6 +7,7 @@ import {
   getStatus,
   isGoalCompleted,
   matchesQuery,
+  sortByEndDate,
   type StatusFilter,
 } from "../lib/goals";
 import {
@@ -57,10 +58,14 @@ export function GoalDetail({ id }: { id: string }) {
     );
   }
 
-  const visible = goal.subgoals.filter(
-    (s) =>
-      matchesQuery(s.title, query) &&
-      (filter === "all" || today === "" || getStatus(s, s.completed, today) === filter),
+  const visible = sortByEndDate(
+    goal.subgoals.filter(
+      (s) =>
+        matchesQuery(s.title, query) &&
+        (filter === "all" || today === "" || getStatus(s, s.completed, today) === filter),
+    ),
+    (s) => s.completed,
+    today,
   );
 
   return (
