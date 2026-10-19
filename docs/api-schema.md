@@ -79,10 +79,23 @@ The store does not validate. Callers validate first.
 
 - `getProgress(goal)` returns `{ done, total, percent }`. `percent` is
   `Math.round(done / total * 100)`, and `0` when there are no subgoals.
+- `isGoalCompleted(goal)` is true when the goal has subgoals and all are done.
 - `formatDate(iso)` formats a `YYYY-MM-DD` string in the viewer's locale
   without time zone shifts.
+- `getTodayIso()` returns today in the viewer's time zone as `YYYY-MM-DD`.
+- `getTimeProgress(item, todayIso)` returns `{ percent, daysLeft, overdue,
+  notStarted }` for the share of the start–end span that has passed. The end
+  date counts as a full day, so an item is overdue only from the day after it.
+- `getStatus(item, completed, todayIso)` returns `"not-started"`,
+  `"in-progress"`, `"overdue"` or `"completed"`. It is the status the time
+  bar shows and the filter bar uses. `StatusFilter` adds `"all"`.
+- `matchesQuery(title, query)` is true when the title, or any word in it,
+  starts with the query (case ignored). An empty query matches everything.
+- `sortByEndDate(items, isCompleted, todayIso)` returns a sorted copy: overdue
+  items first, then by end date, earliest first. Ties keep their stored order.
 
-Progress is computed, never stored.
+Progress, status and sort order are computed, never stored. The lists show
+items in `sortByEndDate` order, whatever order they are stored in.
 
 ## Store functions
 

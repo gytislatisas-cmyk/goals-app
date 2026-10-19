@@ -40,7 +40,8 @@ completed.
 ## Code layout
 - app/lib/goals.ts: types (Goal, Subgoal), validation, progress, completion,
   time progress, status (getStatus, StatusFilter), sort order
-  (sortByEndDate), search match (matchesQuery), date format.
+  (sortByEndDate), search match (matchesQuery), date format, today
+  (getTodayIso).
 - app/lib/goals-store.ts: all reading and writing of localStorage, for goals
   and subgoals (add, update, delete, completeGoal, toggleSubgoal). Components
   go through it and never touch localStorage.
