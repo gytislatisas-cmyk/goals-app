@@ -87,3 +87,20 @@ export function getTimeProgress(
     notStarted: daysBetween(todayIso, item.startDate) > 0,
   };
 }
+
+export type Status = "not-started" | "in-progress" | "overdue" | "completed";
+export type StatusFilter = "all" | Status;
+
+// Matches what the time bar shows: completed wins over the dates, and a
+// not-yet-started item can't be overdue.
+export function getStatus(
+  item: { startDate: string; endDate: string },
+  completed: boolean,
+  todayIso: string,
+): Status {
+  if (completed) return "completed";
+  const { overdue, notStarted } = getTimeProgress(item, todayIso);
+  if (overdue) return "overdue";
+  if (notStarted) return "not-started";
+  return "in-progress";
+}

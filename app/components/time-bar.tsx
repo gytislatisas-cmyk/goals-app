@@ -1,18 +1,7 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
-import { getTimeProgress, getTodayIso } from "../lib/goals";
-
-// Re-check once a minute so the bar updates if the tab stays open past midnight.
-function subscribe(onChange: () => void) {
-  const timer = setInterval(onChange, 60_000);
-  return () => clearInterval(timer);
-}
-
-// The server doesn't know the viewer's date, so it renders nothing.
-function getServerToday() {
-  return "";
-}
+import { getTimeProgress } from "../lib/goals";
+import { useToday } from "./use-today";
 
 function daysLeftLabel(daysLeft: number) {
   if (daysLeft === 0) return "Due today";
@@ -30,7 +19,7 @@ export function TimeBar({
   endDate: string;
   completed: boolean;
 }) {
-  const today = useSyncExternalStore(subscribe, getTodayIso, getServerToday);
+  const today = useToday();
   if (completed) {
     return <p className="text-sm font-medium">Completed! 🏆</p>;
   }

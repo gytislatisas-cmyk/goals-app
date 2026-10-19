@@ -1,23 +1,27 @@
 "use client";
 
 import Link from "next/link";
-import { useSyncExternalStore } from "react";
-import { formatDate, isGoalCompleted } from "../lib/goals";
+import { useState, useSyncExternalStore } from "react";
+import { formatDate, getStatus, isGoalCompleted, type StatusFilter } from "../lib/goals";
 import {
   getServerSnapshot,
   getSnapshot,
   subscribe,
 } from "../lib/goals-store";
+import { FilterBar } from "./filter-bar";
 import { GoalForm } from "./goal-form";
 import { ProgressBar } from "./progress-bar";
 import { SubgoalItem } from "./subgoal-item";
 import { TimeBar } from "./time-bar";
+import { useToday } from "./use-today";
 
 const linkClass =
   "self-start text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50";
 
 export function GoalDetail({ id }: { id: string }) {
   const goals = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const today = useToday();
+  const [filter, setFilter] = useState<StatusFilter>("all");
 
   // Storage hasn't loaded yet: don't claim the goal is missing.
   if (goals === null) {
@@ -45,6 +49,11 @@ export function GoalDetail({ id }: { id: string }) {
     );
   }
 
+  const visible =
+    filter === "all" || today === ""
+      ? goal.subgoals
+      : goal.subgoals.filter((s) => getStatus(s, s.completed, today) === filter);
+
   return (
     <>
       <Link href="/" className={linkClass}>
@@ -71,13 +80,22 @@ export function GoalDetail({ id }: { id: string }) {
           No subgoals yet — add your first one above.
         </p>
       ) : (
-        <ul className="flex flex-col gap-4">
-          {goal.subgoals.map((subgoal) => (
-            <li key={subgoal.id}>
-              <SubgoalItem goalId={goal.id} subgoal={subgoal} />
-            </li>
-          ))}
-        </ul>
+        <>
+          <FilterBar label="Filter subgoals" value={filter} onChange={setFilter} />
+          {visible.length === 0 ? (
+            <p className="rounded-lg border border-dashed border-zinc-300 p-8 text-center text-zinc-600 dark:border-zinc-700 dark:text-zinc-400">
+              No subgoals match this filter.
+            </p>
+          ) : (
+            <ul className="flex flex-col gap-4">
+              {visible.map((subgoal) => (
+                <li key={subgoal.id}>
+                  <SubgoalItem goalId={goal.id} subgoal={subgoal} />
+                </li>
+              ))}
+            </ul>
+          )}
+        </>
       )}
     </>
   );
