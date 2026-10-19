@@ -5,7 +5,7 @@ import { validateGoal, type GoalErrors } from "../lib/goals";
 import { addGoal, addSubgoal } from "../lib/goals-store";
 
 const inputClass =
-  "w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50";
+  "w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50";
 
 // Adds a goal, or a subgoal of that goal when goalId is given.
 export function GoalForm({ goalId }: { goalId?: string }) {
@@ -53,7 +53,7 @@ export function GoalForm({ goalId }: { goalId?: string }) {
         type="button"
         onClick={() => setOpen(true)}
         aria-expanded={false}
-        className="self-start rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800"
+        className="self-start rounded-lg border border-zinc-300 bg-white px-4 py-2 text-sm font-medium hover:bg-zinc-100 dark:border-zinc-700 dark:bg-transparent dark:hover:bg-zinc-800"
       >
         {openLabel}
       </button>
@@ -64,7 +64,7 @@ export function GoalForm({ goalId }: { goalId?: string }) {
     <form
       onSubmit={handleSubmit}
       noValidate
-      className="flex flex-col gap-4 rounded-lg border border-zinc-200 p-4 dark:border-zinc-800"
+      className="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
     >
       <div className="flex flex-col gap-1">
         <label htmlFor="goal-title" className="text-sm font-medium">
@@ -140,14 +140,14 @@ export function GoalForm({ goalId }: { goalId?: string }) {
       <div className="flex gap-2">
         <button
           type="submit"
-          className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
+          className="rounded-lg bg-blue-900 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 dark:bg-blue-500 dark:hover:bg-blue-400"
         >
           {label}
         </button>
         <button
           type="button"
           onClick={handleCancel}
-          className="rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800"
+          className="rounded-lg border border-zinc-300 bg-white px-4 py-2 text-sm font-medium hover:bg-zinc-100 dark:border-zinc-700 dark:bg-transparent dark:hover:bg-zinc-800"
         >
           Cancel
         </button>
