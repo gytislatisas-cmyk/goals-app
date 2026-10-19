@@ -10,11 +10,26 @@ const inputClass =
 // Adds a goal, or a subgoal of that goal when goalId is given.
 export function GoalForm({ goalId }: { goalId?: string }) {
   const label = goalId ? "Add subgoal" : "Add goal";
+  const openLabel = goalId ? "+ New subgoal" : "+ New goal";
+  const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [errors, setErrors] = useState<GoalErrors>({});
   const [saveFailed, setSaveFailed] = useState(false);
+
+  function reset() {
+    setTitle("");
+    setStartDate("");
+    setEndDate("");
+    setErrors({});
+    setSaveFailed(false);
+  }
+
+  function handleCancel() {
+    reset();
+    setOpen(false);
+  }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -25,12 +40,24 @@ export function GoalForm({ goalId }: { goalId?: string }) {
     if (Object.keys(found).length > 0) return;
 
     if (goalId ? addSubgoal(goalId, input) : addGoal(input)) {
-      setTitle("");
-      setStartDate("");
-      setEndDate("");
+      reset();
+      setOpen(false);
     } else {
       setSaveFailed(true);
     }
+  }
+
+  if (!open) {
+    return (
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        aria-expanded={false}
+        className="self-start rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800"
+      >
+        {openLabel}
+      </button>
+    );
   }
 
   return (
@@ -110,12 +137,21 @@ export function GoalForm({ goalId }: { goalId?: string }) {
         </p>
       )}
 
-      <button
-        type="submit"
-        className="self-start rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
-      >
-        {label}
-      </button>
+      <div className="flex gap-2">
+        <button
+          type="submit"
+          className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
+        >
+          {label}
+        </button>
+        <button
+          type="button"
+          onClick={handleCancel}
+          className="rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800"
+        >
+          Cancel
+        </button>
+      </div>
     </form>
   );
 }

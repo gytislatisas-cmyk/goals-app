@@ -4,7 +4,8 @@ end date and a checklist of subgoals; its progress is the share of subgoals
 completed.
 
 ## What it does
-- Add a goal with a title, start date and end date. Edit or delete it.
+- Add a goal with a title, start date and end date, via the "+ New goal"
+  button that expands the form (collapsed by default). Edit or delete it.
 - Complete a goal from its card with the check button: it marks every subgoal
   done. The button is disabled for a goal with no subgoals or one that is
   already completed. There is no undo; untick subgoals on the goal page.
@@ -50,7 +51,8 @@ completed.
     on both pages.
   - useToday gives today's date to TimeBar and the filters; TodayDate is
     rendered once in app/layout.tsx.
-  - GoalForm adds a goal, or a subgoal when given a goalId.
+  - GoalForm adds a goal, or a subgoal when given a goalId. It is collapsed
+    behind a "+ New goal" / "+ New subgoal" button until opened.
 
 ## Stack
 - Next.js (App Router), TypeScript, Tailwind CSS.
