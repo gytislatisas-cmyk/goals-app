@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
-import { getStatus, isGoalCompleted, type StatusFilter } from "../lib/goals";
+import { getStatus, isGoalCompleted, matchesQuery, type StatusFilter } from "../lib/goals";
 import {
   getServerSnapshot,
   getSnapshot,
@@ -9,12 +9,14 @@ import {
 } from "../lib/goals-store";
 import { FilterBar } from "./filter-bar";
 import { GoalCard } from "./goal-card";
+import { SearchBar } from "./search-bar";
 import { useToday } from "./use-today";
 
 export function GoalsList() {
   const goals = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const today = useToday();
   const [filter, setFilter] = useState<StatusFilter>("all");
+  const [query, setQuery] = useState("");
 
   // Storage hasn't loaded yet: show a neutral placeholder, not the empty state.
   if (goals === null) {
@@ -34,17 +36,23 @@ export function GoalsList() {
     );
   }
 
-  const visible =
-    filter === "all" || today === ""
-      ? goals
-      : goals.filter((goal) => getStatus(goal, isGoalCompleted(goal), today) === filter);
+  const visible = goals.filter(
+    (goal) =>
+      matchesQuery(goal.title, query) &&
+      (filter === "all" ||
+        today === "" ||
+        getStatus(goal, isGoalCompleted(goal), today) === filter),
+  );
 
   return (
     <>
-      <FilterBar label="Filter goals" value={filter} onChange={setFilter} />
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <FilterBar label="Filter goals" value={filter} onChange={setFilter} />
+        <SearchBar label="Search goals" value={query} onChange={setQuery} />
+      </div>
       {visible.length === 0 ? (
         <p className="rounded-lg border border-dashed border-zinc-300 p-8 text-center text-zinc-600 dark:border-zinc-700 dark:text-zinc-400">
-          No goals match this filter.
+          No goals match your search or filter.
         </p>
       ) : (
         <ul className="flex flex-col gap-4">

@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { useState, useSyncExternalStore } from "react";
-import { formatDate, getStatus, isGoalCompleted, type StatusFilter } from "../lib/goals";
+import {
+  formatDate,
+  getStatus,
+  isGoalCompleted,
+  matchesQuery,
+  type StatusFilter,
+} from "../lib/goals";
 import {
   getServerSnapshot,
   getSnapshot,
@@ -11,6 +17,7 @@ import {
 import { FilterBar } from "./filter-bar";
 import { GoalForm } from "./goal-form";
 import { ProgressBar } from "./progress-bar";
+import { SearchBar } from "./search-bar";
 import { SubgoalItem } from "./subgoal-item";
 import { TimeBar } from "./time-bar";
 import { useToday } from "./use-today";
@@ -22,6 +29,7 @@ export function GoalDetail({ id }: { id: string }) {
   const goals = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const today = useToday();
   const [filter, setFilter] = useState<StatusFilter>("all");
+  const [query, setQuery] = useState("");
 
   // Storage hasn't loaded yet: don't claim the goal is missing.
   if (goals === null) {
@@ -49,10 +57,11 @@ export function GoalDetail({ id }: { id: string }) {
     );
   }
 
-  const visible =
-    filter === "all" || today === ""
-      ? goal.subgoals
-      : goal.subgoals.filter((s) => getStatus(s, s.completed, today) === filter);
+  const visible = goal.subgoals.filter(
+    (s) =>
+      matchesQuery(s.title, query) &&
+      (filter === "all" || today === "" || getStatus(s, s.completed, today) === filter),
+  );
 
   return (
     <>
@@ -81,10 +90,13 @@ export function GoalDetail({ id }: { id: string }) {
         </p>
       ) : (
         <>
-          <FilterBar label="Filter subgoals" value={filter} onChange={setFilter} />
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <FilterBar label="Filter subgoals" value={filter} onChange={setFilter} />
+            <SearchBar label="Search subgoals" value={query} onChange={setQuery} />
+          </div>
           {visible.length === 0 ? (
             <p className="rounded-lg border border-dashed border-zinc-300 p-8 text-center text-zinc-600 dark:border-zinc-700 dark:text-zinc-400">
-              No subgoals match this filter.
+              No subgoals match your search or filter.
             </p>
           ) : (
             <ul className="flex flex-col gap-4">

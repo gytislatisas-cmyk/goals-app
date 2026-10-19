@@ -104,3 +104,14 @@ export function getStatus(
   if (notStarted) return "not-started";
   return "in-progress";
 }
+
+// True when the title, or any word in it, starts with the query (ignoring case).
+// An empty query matches everything.
+export function matchesQuery(title: string, query: string): boolean {
+  const q = query.trim().toLowerCase();
+  if (q === "") return true;
+  return title
+    .toLowerCase()
+    .split(/\s+/)
+    .some((word) => word.startsWith(q)) || title.toLowerCase().startsWith(q);
+}
