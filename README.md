@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Goals
 
-## Getting Started
+A small app for tracking personal goals. Each goal has a start and end date and
+a checklist of subgoals; its progress is the share of subgoals completed.
 
-First, run the development server:
+![Goals app screenshot](docs/images/screenshot.png)
+
+## Features
+
+- Add a goal with a title, start date and end date, then edit or delete it.
+- Open a goal to add, edit, delete and tick off its subgoals. Each subgoal has
+  its own title and dates.
+- Progress bar and "X of Y subgoals done" on every goal and goal page.
+- Time bar showing how much of the date span has passed: "N days left",
+  "Due today", "Not started", red "Overdue", or "Completed!".
+- Complete a whole goal in one click from its card (marks every subgoal done).
+- Filter by status (All, In progress, Overdue, Not started, Completed) and
+  search by title. Both reset on reload.
+- Lists are sorted by end date, with overdue items first.
+- Deleting a goal also deletes its subgoals.
+- Light and dark mode.
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Other scripts:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run lint` checks the code.
+- `npm run build` makes a production build.
 
-## Learn More
+## Data and privacy
 
-To learn more about Next.js, take a look at the following resources:
+The app runs locally only. There is no backend, API or user account. Your goals
+are saved in your browser's `localStorage` (key `goals-app`), so they stay in
+that browser and on that origin: opening the app on a different port shows an
+empty list.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tech stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Next.js (App Router), React, TypeScript and Tailwind CSS.
 
-## Deploy on Vercel
+## Project structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `app/page.tsx`: home page with the add-goal form and goals list.
+- `app/goals/[id]/page.tsx`: goal page with its subgoals.
+- `app/components/`: UI components.
+- `app/lib/goals.ts`: types, validation, progress, status, sorting and search.
+- `app/lib/goals-store.ts`: all reading and writing of localStorage.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Documentation
+
+- [docs/decisions.md](docs/decisions.md): why localStorage.
+- [docs/storage-research.md](docs/storage-research.md): browser storage research.
+- [docs/api-schema.md](docs/api-schema.md): stored data and store functions.
+- [AGENTS.md](AGENTS.md): project guidelines for AI coding agents.
