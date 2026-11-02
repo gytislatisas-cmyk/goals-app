@@ -53,7 +53,7 @@ export function GoalForm({ goalId }: { goalId?: string }) {
         type="button"
         onClick={() => setOpen(true)}
         aria-expanded={false}
-        className="self-start rounded-lg border border-zinc-300 bg-white px-4 py-2 text-sm font-medium hover:bg-zinc-100 dark:border-zinc-700 dark:bg-transparent dark:hover:bg-zinc-800"
+        className="self-start rounded-lg bg-blue-900 px-5 py-2.5 text-sm font-bold text-white shadow-md transition-colors hover:bg-blue-800 dark:bg-blue-500 dark:hover:bg-blue-400"
       >
         {openLabel}
       </button>

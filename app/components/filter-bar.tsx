@@ -27,10 +27,10 @@ export function FilterBar({
             type="button"
             onClick={() => onChange(option.value)}
             aria-pressed={active}
-            className={`rounded-full border px-3 py-1 text-sm font-medium transition-colors ${
+            className={`rounded-full border px-3.5 py-1 text-sm font-semibold transition-colors ${
               active
                 ? "border-blue-900 bg-blue-900 text-white dark:border-blue-500 dark:bg-blue-500"
-                : "border-zinc-200 text-zinc-600 hover:bg-zinc-100 dark:border-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-900"
+                : "border-blue-200 bg-white/60 text-blue-900 hover:bg-white dark:border-blue-900 dark:bg-transparent dark:text-blue-300 dark:hover:bg-blue-950"
             }`}
           >
             {option.label}

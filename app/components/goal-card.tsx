@@ -30,10 +30,10 @@ export function GoalCard({ goal }: { goal: Goal }) {
     <div className="relative">
       <Link
         href={`/goals/${goal.id}`}
-        className="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-white p-5 pr-32 shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900"
+        className="flex flex-col gap-3 rounded-xl border border-blue-200 bg-white p-5 pr-32 shadow-md hover:shadow-lg dark:border-zinc-800 dark:border-zinc-800 dark:bg-zinc-900"
       >
         <div>
-          <h2 className="text-lg font-semibold">{goal.title}</h2>
+          <h2 className="font-display text-xl font-bold tracking-tight">{goal.title}</h2>
           <p className="text-sm text-zinc-600 dark:text-zinc-400">
             {formatDate(goal.startDate)} – {formatDate(goal.endDate)}
           </p>

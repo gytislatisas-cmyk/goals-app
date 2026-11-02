@@ -28,8 +28,8 @@ export function GoalsList() {
   if (goals === null) {
     return (
       <div aria-busy="true" aria-label="Loading goals" className="flex flex-col gap-4">
-        <div className="h-28 animate-pulse rounded-lg bg-zinc-100 dark:bg-zinc-900" />
-        <div className="h-28 animate-pulse rounded-lg bg-zinc-100 dark:bg-zinc-900" />
+        <div className="h-28 rounded-lg bg-zinc-100 dark:bg-zinc-900" />
+        <div className="h-28 rounded-lg bg-zinc-100 dark:bg-zinc-900" />
       </div>
     );
   }
