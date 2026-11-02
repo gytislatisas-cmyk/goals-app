@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: staged-feature
+expected_outcome: |
+  A feat message about title search, in one code block, with nothing committed.

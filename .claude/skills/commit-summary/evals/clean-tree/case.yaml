@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: clean-tree
+expected_outcome: |
+  Says there is nothing to summarize and gives no commit message.
